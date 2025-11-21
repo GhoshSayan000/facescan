@@ -1,24 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Camera, 
-  Check, 
-  X, 
-  AlertCircle, 
-  TrendingUp, 
-  Calendar,
-  Bell,
-  MessageSquare
-} from "lucide-react";
-
+import { Camera, Check, X, AlertCircle, TrendingUp, Calendar, Bell, MessageSquare } from "lucide-react";
 export const DashboardPreview = () => {
-  return (
-    <section className="py-20 md:py-32 bg-muted/30">
+  return <section className="py-20 md:py-32 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Dashboard <span className="gradient-text">Preview</span>
+            Dashboard Preview <span className="gradient-text">Preview</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Get a glimpse of the intuitive dashboards designed for teachers and students
@@ -60,31 +49,34 @@ export const DashboardPreview = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {[
-                  { name: "John Doe", status: "present", time: "09:02 AM" },
-                  { name: "Jane Smith", status: "present", time: "09:01 AM" },
-                  { name: "Mike Johnson", status: "pending", time: "---" },
-                  { name: "Sarah Wilson", status: "absent", time: "---" },
-                ].map((student, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                {[{
+                name: "John Doe",
+                status: "present",
+                time: "09:02 AM"
+              }, {
+                name: "Jane Smith",
+                status: "present",
+                time: "09:01 AM"
+              }, {
+                name: "Mike Johnson",
+                status: "pending",
+                time: "---"
+              }, {
+                name: "Sarah Wilson",
+                status: "absent",
+                time: "---"
+              }].map((student, i) => <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                     <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${
-                        student.status === "present" ? "bg-accent" : 
-                        student.status === "pending" ? "bg-warning" : "bg-destructive"
-                      }`}></div>
+                      <div className={`w-2 h-2 rounded-full ${student.status === "present" ? "bg-accent" : student.status === "pending" ? "bg-warning" : "bg-destructive"}`}></div>
                       <span className="font-medium">{student.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-sm text-muted-foreground">{student.time}</span>
-                      <Badge variant={
-                        student.status === "present" ? "default" : 
-                        student.status === "pending" ? "secondary" : "destructive"
-                      }>
+                      <Badge variant={student.status === "present" ? "default" : student.status === "pending" ? "secondary" : "destructive"}>
                         {student.status}
                       </Badge>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
 
@@ -97,11 +89,15 @@ export const DashboardPreview = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {[
-                  { name: "Mike Johnson", reason: "Attendance not marked", time: "2 min ago" },
-                  { name: "Emily Brown", reason: "Medical leave request", time: "5 min ago" },
-                ].map((request, i) => (
-                  <div key={i} className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                {[{
+                name: "Mike Johnson",
+                reason: "Attendance not marked",
+                time: "2 min ago"
+              }, {
+                name: "Emily Brown",
+                reason: "Medical leave request",
+                time: "5 min ago"
+              }].map((request, i) => <div key={i} className="p-3 rounded-lg bg-warning/10 border border-warning/20">
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <p className="font-medium">{request.name}</p>
@@ -119,14 +115,15 @@ export const DashboardPreview = () => {
                         Reject
                       </Button>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
           </div>
 
           {/* Student Dashboard */}
-          <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+          <div className="space-y-6 animate-fade-in-up" style={{
+          animationDelay: "0.2s"
+        }}>
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-accent rounded-lg p-2">
                 <TrendingUp className="h-6 w-6 text-accent-foreground" />
@@ -168,26 +165,34 @@ export const DashboardPreview = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {[
-                    { date: "Today", percentage: 75, classes: "3/4" },
-                    { date: "Yesterday", percentage: 100, classes: "4/4" },
-                    { date: "2 days ago", percentage: 100, classes: "4/4" },
-                    { date: "3 days ago", percentage: 75, classes: "3/4" },
-                  ].map((day, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  {[{
+                  date: "Today",
+                  percentage: 75,
+                  classes: "3/4"
+                }, {
+                  date: "Yesterday",
+                  percentage: 100,
+                  classes: "4/4"
+                }, {
+                  date: "2 days ago",
+                  percentage: 100,
+                  classes: "4/4"
+                }, {
+                  date: "3 days ago",
+                  percentage: 75,
+                  classes: "3/4"
+                }].map((day, i) => <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                       <span className="font-medium">{day.date}</span>
                       <div className="flex items-center gap-3">
                         <span className="text-sm text-muted-foreground">{day.classes} classes</span>
                         <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-accent rounded-full"
-                            style={{ width: `${day.percentage}%` }}
-                          ></div>
+                          <div className="h-full bg-accent rounded-full" style={{
+                        width: `${day.percentage}%`
+                      }}></div>
                         </div>
                         <span className="text-sm font-bold text-accent">{day.percentage}%</span>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -213,6 +218,5 @@ export const DashboardPreview = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
