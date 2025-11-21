@@ -27,7 +27,10 @@ export const DashboardPreview = () => {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Teacher Dashboard */}
-          <div className="space-y-6 animate-fade-in-up">
+          <div 
+            className="space-y-6 animate-fade-in-up cursor-pointer hover:scale-[1.02] transition-transform"
+            onClick={() => window.location.href = '/teacher-login'}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-primary rounded-lg p-2">
                 <Camera className="h-6 w-6 text-primary-foreground" />
@@ -126,7 +129,11 @@ export const DashboardPreview = () => {
           </div>
 
           {/* Student Dashboard */}
-          <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+          <div 
+            className="space-y-6 animate-fade-in-up cursor-pointer hover:scale-[1.02] transition-transform" 
+            style={{ animationDelay: "0.2s" }}
+            onClick={() => window.location.href = '/student-login'}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-accent rounded-lg p-2">
                 <TrendingUp className="h-6 w-6 text-accent-foreground" />
