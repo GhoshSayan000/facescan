@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useRef } from "react";
-import heroImage from "@/assets/hero-student-photo.jpg";
+import cameraInterface from "@/assets/camera-interface-mockup.jpg";
 
 export const HeroSection = () => {
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -70,12 +70,12 @@ export const HeroSection = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-3xl -z-10"></div>
             <div className="relative cursor-pointer group" onClick={handleImageClick}>
               <img
-                src={heroImage}
-                alt="Student using face recognition attendance system"
+                src={cameraInterface}
+                alt="Face recognition camera interface for attendance"
                 className="rounded-2xl shadow-2xl w-full hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-2xl transition-colors duration-300 flex items-center justify-center">
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/90 text-primary-foreground px-6 py-3 rounded-full font-medium">
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-2xl transition-colors duration-300 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/90 text-primary-foreground px-6 py-3 rounded-full font-medium shadow-lg">
                   📸 Open Camera
                 </div>
               </div>
