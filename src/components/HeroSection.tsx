@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useRef } from "react";
+import heroImage from "@/assets/hero-student-photo.jpg";
 
 export const HeroSection = () => {
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    cameraInputRef.current?.click();
+  };
+
   return (
     <section id="home" className="relative py-20 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-[var(--gradient-hero)] -z-10"></div>
@@ -60,10 +68,29 @@ export const HeroSection = () => {
 
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-3xl -z-10"></div>
-            <img
-              src="/placeholder.svg"
-              alt="Students using face recognition attendance"
-              className="rounded-2xl shadow-2xl w-full hover:scale-105 transition-transform duration-500"
+            <div className="relative cursor-pointer group" onClick={handleImageClick}>
+              <img
+                src={heroImage}
+                alt="Student using face recognition attendance system"
+                className="rounded-2xl shadow-2xl w-full hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-2xl transition-colors duration-300 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/90 text-primary-foreground px-6 py-3 rounded-full font-medium">
+                  📸 Open Camera
+                </div>
+              </div>
+            </div>
+            <input
+              ref={cameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) {
+                  console.log("Camera image captured:", e.target.files[0]);
+                }
+              }}
             />
           </div>
         </div>
