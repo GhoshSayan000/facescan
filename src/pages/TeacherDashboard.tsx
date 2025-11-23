@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,13 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function TeacherDashboard() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
+  
+  const classId = searchParams.get("class");
+  const semesterId = searchParams.get("semester");
+  const date = searchParams.get("date");
 
   useEffect(() => {
     checkAuth();
@@ -98,13 +103,17 @@ export default function TeacherDashboard() {
                 Live Face Scanning
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg flex items-center justify-center border-2 border-dashed border-primary/30">
                 <div className="text-center">
                   <Camera className="h-12 w-12 text-primary mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">Camera Feed Active</p>
                 </div>
               </div>
+              <Button variant="outline" className="w-full">
+                <Camera className="h-4 w-4 mr-2" />
+                Open Camera App
+              </Button>
             </CardContent>
           </Card>
 
@@ -116,7 +125,7 @@ export default function TeacherDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {students.map((student, i) => (
+              {students.slice(0, 4).map((student, i) => (
                 <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${
@@ -136,6 +145,13 @@ export default function TeacherDashboard() {
                   </div>
                 </div>
               ))}
+              <Button 
+                variant="outline" 
+                className="w-full mt-3"
+                onClick={() => navigate(`/teacher/attendance-list?class=${classId}&semester=${semesterId}&date=${date}`)}
+              >
+                View More
+              </Button>
             </CardContent>
           </Card>
 
@@ -148,7 +164,7 @@ export default function TeacherDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {requests.map((request, i) => (
+              {requests.slice(0, 2).map((request, i) => (
                 <div key={i} className="p-3 rounded-lg bg-warning/10 border border-warning/20">
                   <div className="flex items-start justify-between mb-2">
                     <div>
@@ -169,6 +185,13 @@ export default function TeacherDashboard() {
                   </div>
                 </div>
               ))}
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => navigate(`/teacher/requests?class=${classId}&semester=${semesterId}&date=${date}`)}
+              >
+                View More
+              </Button>
             </CardContent>
           </Card>
         </div>

@@ -112,6 +112,13 @@ export default function StudentDashboard() {
                   <p className="text-xs text-muted-foreground">Absent</p>
                 </div>
               </div>
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                onClick={() => navigate("/student/today-attendance")}
+              >
+                View More
+              </Button>
             </CardContent>
           </Card>
 
@@ -137,6 +144,13 @@ export default function StudentDashboard() {
                   </div>
                 ))}
               </div>
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                onClick={() => navigate("/student/attendance-history")}
+              >
+                View More
+              </Button>
             </CardContent>
           </Card>
 
@@ -148,13 +162,22 @@ export default function StudentDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full" size="lg">
+              <Button 
+                className="w-full" 
+                size="lg"
+                onClick={() => navigate("/student/request-attendance")}
+              >
                 <MessageSquare className="h-4 w-4 mr-2" />
-                Ping Teacher for Attendance
+                Request Attendance Correction
               </Button>
-              <Button variant="outline" className="w-full" size="lg">
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                size="lg"
+                onClick={() => navigate("/student/request-leave")}
+              >
                 <Calendar className="h-4 w-4 mr-2" />
-                Request Medical Leave
+                Request Leave
               </Button>
             </CardContent>
           </Card>

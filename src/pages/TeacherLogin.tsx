@@ -50,7 +50,7 @@ const TeacherLogin = () => {
         description: "Welcome back, Teacher!",
       });
       
-      navigate("/teacher-dashboard");
+      navigate("/teacher/setup");
     } catch (error: any) {
       toast({
         title: "Login Failed",
