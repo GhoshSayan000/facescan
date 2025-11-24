@@ -7,19 +7,27 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowLeft, CalendarIcon, Upload } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, CalendarIcon, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+
+type Teacher = {
+  id: string;
+  full_name: string | null;
+};
 
 export default function StudentRequestLeave() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedTeacher, setSelectedTeacher] = useState("");
   const [reason, setReason] = useState("");
-  const [subjects, setSubjects] = useState<any[]>([]);
+  const [file, setFile] = useState<File | null>(null);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [studentClass, setStudentClass] = useState<any>(null);
   const [studentSemester, setStudentSemester] = useState<any>(null);
 
@@ -40,17 +48,69 @@ export default function StudentRequestLeave() {
   };
 
   const fetchData = async () => {
-    const { data: subjectsData } = await supabase.from("subjects").select("*").limit(5);
+    // Fetch teachers (users with teacher role)
+    const { data: teacherRoles } = await supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "teacher");
+
+    if (teacherRoles && teacherRoles.length > 0) {
+      const teacherIds = teacherRoles.map(r => r.user_id);
+      const { data: teachersData } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", teacherIds);
+      
+      setTeachers(teachersData || []);
+    }
+
     const { data: classesData } = await supabase.from("classes").select("*").limit(1).single();
     const { data: semestersData } = await supabase.from("semesters").select("*").limit(1).single();
     
-    setSubjects(subjectsData || []);
     setStudentClass(classesData);
     setStudentSemester(semestersData);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      // Validate file size (max 5MB)
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Error",
+          description: "File size must be less than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      setFile(selectedFile);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
+  };
+
+  const uploadFile = async (userId: string): Promise<string | null> => {
+    if (!file) return null;
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}/${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('student-requests')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      console.error("Upload error:", uploadError);
+      return null;
+    }
+
+    return fileName;
+  };
+
   const handleSubmit = async () => {
-    if (!selectedDate || !reason) {
+    if (!selectedDate || !reason || !selectedTeacher) {
       toast({
         title: "Error",
         description: "Please fill all required fields",
@@ -59,35 +119,67 @@ export default function StudentRequestLeave() {
       return;
     }
 
-    const { data: { session } } = await supabase.auth.getSession();
-    const subject = selectedSubject ? subjects.find(s => s.id === selectedSubject) : null;
+    setSubmitting(true);
 
-    const { error } = await supabase.from("student_requests").insert({
-      type: "leave",
-      student_id: session?.user.id,
-      teacher_id: subject?.teacher_id,
-      class_id: studentClass?.id,
-      semester_id: studentSemester?.id,
-      subject_id: selectedSubject || null,
-      date: format(selectedDate, "yyyy-MM-dd"),
-      message: reason,
-      status: "pending",
-    });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Error",
+          description: "You must be logged in",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit request",
-        variant: "destructive",
+      // Upload file if provided
+      let filePath = null;
+      if (file) {
+        filePath = await uploadFile(session.user.id);
+        if (!filePath) {
+          toast({
+            title: "Error",
+            description: "Failed to upload file",
+            variant: "destructive",
+          });
+          setSubmitting(false);
+          return;
+        }
+      }
+
+      const { error } = await supabase.from("student_requests").insert({
+        type: "leave",
+        student_id: session.user.id,
+        teacher_id: selectedTeacher,
+        class_id: studentClass?.id,
+        semester_id: studentSemester?.id,
+        subject_id: null,
+        date: format(selectedDate, "yyyy-MM-dd"),
+        message: reason,
+        file_path: filePath,
+        status: "pending",
       });
-    } else {
-      toast({
-        title: "Success",
-        description: "Leave request submitted",
-      });
-      navigate("/student-dashboard");
+
+      if (error) {
+        console.error("Insert error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to submit request",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: "Leave request submitted successfully",
+        });
+        navigate("/student-dashboard");
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
+
+  const isFormValid = selectedDate && reason.trim() && selectedTeacher;
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -110,9 +202,85 @@ export default function StudentRequestLeave() {
           <CardHeader>
             <CardTitle>Submit Leave Request</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div>
-              <label className="text-sm font-medium mb-2 block">Select Date</label>
+              <label className="text-sm font-medium mb-2 block">
+                Leave Reason <span className="text-destructive">*</span>
+              </label>
+              <Textarea
+                placeholder="Explain your reason for requesting leave..."
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                rows={6}
+                className="resize-none"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                File/Image Attachment (Optional)
+              </label>
+              {!file ? (
+                <div>
+                  <Input
+                    type="file"
+                    accept="image/*,.pdf,.doc,.docx"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <label htmlFor="file-upload">
+                    <Button variant="outline" className="w-full" type="button" asChild>
+                      <span className="cursor-pointer">
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Supporting Document
+                      </span>
+                    </Button>
+                  </label>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Supported: Images, PDF, DOC (Max 5MB)
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Upload className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium truncate">{file.name}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleRemoveFile}
+                    type="button"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                Subject To (Teacher) <span className="text-destructive">*</span>
+              </label>
+              <Select value={selectedTeacher} onValueChange={setSelectedTeacher}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Select teacher" />
+                </SelectTrigger>
+                <SelectContent className="bg-background z-50">
+                  {teachers.map((teacher) => (
+                    <SelectItem key={teacher.id} value={teacher.id}>
+                      {teacher.full_name || "Unnamed Teacher"}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                Apply For Date <span className="text-destructive">*</span>
+              </label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -126,7 +294,7 @@ export default function StudentRequestLeave() {
                     {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0 bg-background z-50" align="start">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
@@ -137,45 +305,18 @@ export default function StudentRequestLeave() {
                   />
                 </PopoverContent>
               </Popover>
+              <p className="text-xs text-muted-foreground mt-2">
+                Only today and future dates can be selected
+              </p>
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">Select Subject (Optional)</label>
-              <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a subject or leave blank for all" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">All Subjects</SelectItem>
-                  {subjects.map((subject) => (
-                    <SelectItem key={subject.id} value={subject.id}>
-                      {subject.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-2 block">Reason for Leave</label>
-              <Textarea
-                placeholder="Explain your reason for requesting leave..."
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                rows={5}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-2 block">Attach File (Optional)</label>
-              <Button variant="outline" className="w-full">
-                <Upload className="h-4 w-4 mr-2" />
-                Upload Supporting Document
-              </Button>
-            </div>
-
-            <Button className="w-full" size="lg" onClick={handleSubmit}>
-              Submit Request
+            <Button 
+              className="w-full" 
+              size="lg" 
+              onClick={handleSubmit}
+              disabled={!isFormValid || submitting}
+            >
+              {submitting ? "Submitting..." : "Submit Request"}
             </Button>
           </CardContent>
         </Card>
