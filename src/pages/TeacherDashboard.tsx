@@ -9,7 +9,8 @@ import {
   Check, 
   X, 
   Bell,
-  LogOut
+  LogOut,
+  ArrowLeft
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -82,6 +83,14 @@ export default function TeacherDashboard() {
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate("/teacher-setup")}
+              className="mr-2"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
             <div className="bg-primary rounded-lg p-2">
               <Camera className="h-6 w-6 text-primary-foreground" />
             </div>
