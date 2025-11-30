@@ -86,7 +86,7 @@ export default function TeacherDashboard() {
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => navigate("/teacher-setup")}
+              onClick={() => navigate("/teacher/setup")}
               className="mr-2"
             >
               <ArrowLeft className="h-5 w-5" />
