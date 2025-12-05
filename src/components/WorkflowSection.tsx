@@ -24,45 +24,45 @@ export const WorkflowSection = () => {
   ];
 
   return (
-    <section className="py-20 md:py-32">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+    <section className="py-24 md:py-36 bg-gradient-to-b from-transparent to-muted/30">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="text-center mb-20 animate-fade-in-up">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
             How It <span className="gradient-text">Works</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Simple, fast, and efficient attendance process in three easy steps
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 relative">
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-10 relative">
           {/* Connection Lines */}
-          <div className="hidden md:block absolute top-20 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-warning to-accent -z-10"></div>
+          <div className="hidden md:block absolute top-24 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-primary via-warning to-accent opacity-40 -z-10"></div>
 
           {steps.map((step, index) => (
             <Card 
               key={index} 
-              className="relative hover-lift animate-fade-in-up border-2"
+              className="relative hover-lift animate-fade-in-up bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl"
               style={{ animationDelay: `${index * 0.15}s` }}
             >
-              <CardContent className="pt-12 text-center">
-                <div className={`bg-${step.color} absolute -top-8 left-1/2 -translate-x-1/2 rounded-full p-6 shadow-lg`}>
+              <CardContent className="pt-14 pb-8 text-center">
+                <div className={`bg-${step.color} absolute -top-8 left-1/2 -translate-x-1/2 rounded-2xl p-5 shadow-[var(--shadow-card)]`}>
                   <step.icon className={`h-8 w-8 text-${step.color}-foreground`} />
                 </div>
                 
-                <div className="absolute -top-4 -left-4 bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg shadow-md">
+                <div className="absolute -top-3 -left-3 bg-primary text-primary-foreground rounded-xl w-9 h-9 flex items-center justify-center font-bold text-lg shadow-md">
                   {index + 1}
                 </div>
 
-                <h3 className="text-xl font-bold mb-3 mt-4">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
+                <h3 className="text-xl font-bold mb-4 mt-4 tracking-tight">{step.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        <div className="mt-16 text-center">
-          <div className="inline-block bg-accent/10 backdrop-blur-sm px-6 py-4 rounded-xl border border-accent/20">
+        <div className="mt-20 text-center">
+          <div className="inline-block bg-card/80 backdrop-blur-sm px-8 py-5 rounded-2xl border border-accent/20 shadow-soft">
             <p className="text-lg font-medium">
               ⚡ Average process time: <span className="text-accent font-bold">Less than 5 seconds</span>
             </p>
