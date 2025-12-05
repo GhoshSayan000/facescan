@@ -6,7 +6,7 @@ import { DashboardPreview } from "@/components/DashboardPreview";
 import { Footer } from "@/components/Footer";
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[var(--gradient-hero)]">
+    <div className="min-h-screen animated-gradient-bg">
       <Navbar />
       <main>
         <HeroSection />
