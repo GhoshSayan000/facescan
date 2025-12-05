@@ -215,41 +215,41 @@ export const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" className="py-20 md:py-32 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+    <section id="features" className="py-24 md:py-36 section-gradient">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="text-center mb-20 animate-fade-in-up">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
             Powerful Features for <span className="gradient-text">Everyone</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Designed to streamline attendance management for both teachers and students
           </p>
         </div>
 
         {/* Teacher Features */}
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="bg-primary rounded-lg p-2">
+        <div className="mb-20">
+          <div className="flex items-center gap-4 mb-10">
+            <div className="bg-primary rounded-xl p-3 shadow-soft">
               <Users className="h-6 w-6 text-primary-foreground" />
             </div>
-            <h3 className="text-2xl font-bold">For Teachers</h3>
+            <h3 className="text-2xl font-bold tracking-tight">For Teachers</h3>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {teacherFeatures.map((feature, index) => (
               <Card 
                 key={index} 
-                className="hover-lift border-2 hover:border-primary/50 animate-fade-in-up cursor-pointer transition-all"
+                className="hover-lift bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/40 animate-fade-in-up cursor-pointer transition-all rounded-xl"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => setSelectedFeature(feature)}
               >
-                <CardHeader>
-                  <div className="bg-primary/10 rounded-lg p-3 w-fit mb-3">
+                <CardHeader className="pb-3">
+                  <div className="bg-primary/10 rounded-xl p-3 w-fit mb-4">
                     <feature.icon className="h-6 w-6 text-primary" />
                   </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  <CardTitle className="text-lg font-semibold">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -258,28 +258,28 @@ export const FeaturesSection = () => {
 
         {/* Student Features */}
         <div>
-          <div className="flex items-center gap-3 mb-8">
-            <div className="bg-accent rounded-lg p-2">
+          <div className="flex items-center gap-4 mb-10">
+            <div className="bg-accent rounded-xl p-3 shadow-soft">
               <Users className="h-6 w-6 text-accent-foreground" />
             </div>
-            <h3 className="text-2xl font-bold">For Students</h3>
+            <h3 className="text-2xl font-bold tracking-tight">For Students</h3>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {studentFeatures.map((feature, index) => (
               <Card 
                 key={index} 
-                className="hover-lift border-2 hover:border-accent/50 animate-fade-in-up cursor-pointer transition-all"
+                className="hover-lift bg-card/80 backdrop-blur-sm border border-border/50 hover:border-accent/40 animate-fade-in-up cursor-pointer transition-all rounded-xl"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => setSelectedFeature(feature)}
               >
-                <CardHeader>
-                  <div className="bg-accent/10 rounded-lg p-3 w-fit mb-3">
+                <CardHeader className="pb-3">
+                  <div className="bg-accent/10 rounded-xl p-3 w-fit mb-4">
                     <feature.icon className="h-6 w-6 text-accent" />
                   </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  <CardTitle className="text-lg font-semibold">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}

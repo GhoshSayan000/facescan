@@ -12,24 +12,26 @@ export const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="relative py-20 md:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-[var(--gradient-hero)] -z-10"></div>
+    <section id="home" className="relative py-24 md:py-36 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent -z-10"></div>
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl -z-10"></div>
       
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 bg-secondary/50 backdrop-blur-sm px-4 py-2 rounded-full border border-primary/20">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-10 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 bg-card/80 backdrop-blur-sm px-5 py-2.5 rounded-full border border-primary/15 shadow-soft">
               <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-secondary-foreground">AI-Powered Attendance</span>
+              <span className="text-sm font-semibold text-primary">AI-Powered Attendance</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
               Smart Attendance.{" "}
               <span className="gradient-text">Zero Roll Call.</span>{" "}
               Instant Recognition.
             </h1>
             
-            <p className="text-lg text-muted-foreground max-w-xl">
+            <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
               AI-powered face detection makes attendance automatic, fast, and accurate. 
               Say goodbye to manual roll calls and hello to seamless classroom management.
             </p>
@@ -48,31 +50,31 @@ export const HeroSection = () => {
               </Link>
             </div>
 
-            <div className="flex items-center gap-8 pt-4">
-              <div>
-                <div className="text-3xl font-bold text-primary">99.9%</div>
-                <div className="text-sm text-muted-foreground">Accuracy Rate</div>
+            <div className="flex items-center gap-8 pt-6">
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary">99.9%</div>
+                <div className="text-sm text-muted-foreground mt-1">Accuracy Rate</div>
               </div>
-              <div className="h-12 w-px bg-border"></div>
-              <div>
-                <div className="text-3xl font-bold text-primary">&lt;2s</div>
-                <div className="text-sm text-muted-foreground">Recognition Time</div>
+              <div className="h-14 w-px bg-border/60"></div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary">&lt;2s</div>
+                <div className="text-sm text-muted-foreground mt-1">Recognition Time</div>
               </div>
-              <div className="h-12 w-px bg-border"></div>
-              <div>
-                <div className="text-3xl font-bold text-primary">24/7</div>
-                <div className="text-sm text-muted-foreground">Support</div>
+              <div className="h-14 w-px bg-border/60"></div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary">24/7</div>
+                <div className="text-sm text-muted-foreground mt-1">Support</div>
               </div>
             </div>
           </div>
 
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-3xl -z-10"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-[2rem] blur-2xl -z-10"></div>
             <div className="relative cursor-pointer group" onClick={handleImageClick}>
               <img
                 src={cameraInterface}
                 alt="Face recognition camera interface for attendance"
-                className="rounded-2xl shadow-2xl w-full hover:scale-105 transition-transform duration-500"
+                className="rounded-2xl shadow-[var(--shadow-elegant)] w-full hover:scale-[1.02] transition-transform duration-500 border border-border/30"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-2xl transition-colors duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/90 text-primary-foreground px-6 py-3 rounded-full font-medium shadow-lg">
