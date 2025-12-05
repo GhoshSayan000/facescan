@@ -163,10 +163,10 @@ All colors MUST be HSL.
   .animated-gradient-bg {
     background: linear-gradient(
       -45deg,
-      hsl(174 45% 88%),
-      hsl(200 55% 90%),
-      hsl(260 40% 91%),
-      hsl(220 50% 89%)
+      hsl(174 45% 91%),
+      hsl(200 55% 92%),
+      hsl(260 40% 93%),
+      hsl(220 50% 91%)
     );
     background-size: 400% 400%;
     animation: gradientShift 12s ease infinite;
