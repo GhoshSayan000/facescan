@@ -50,18 +50,18 @@ export const HeroSection = () => {
               </Link>
             </div>
 
-            <div className="flex items-center gap-8 pt-6">
-              <div className="text-center">
+            <div className="flex items-center gap-6 pt-6">
+              <div className="text-center px-4 py-3 rounded-xl bg-card/50 border border-transparent hover:border-primary/20 hover:bg-primary/10 hover:scale-110 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.3)] transition-all duration-300 cursor-default">
                 <div className="text-3xl md:text-4xl font-bold text-primary">99.9%</div>
                 <div className="text-sm text-muted-foreground mt-1">Accuracy Rate</div>
               </div>
               <div className="h-14 w-px bg-border/60"></div>
-              <div className="text-center">
+              <div className="text-center px-4 py-3 rounded-xl bg-card/50 border border-transparent hover:border-primary/20 hover:bg-primary/10 hover:scale-110 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.3)] transition-all duration-300 cursor-default">
                 <div className="text-3xl md:text-4xl font-bold text-primary">&lt;2s</div>
                 <div className="text-sm text-muted-foreground mt-1">Recognition Time</div>
               </div>
               <div className="h-14 w-px bg-border/60"></div>
-              <div className="text-center">
+              <div className="text-center px-4 py-3 rounded-xl bg-card/50 border border-transparent hover:border-primary/20 hover:bg-primary/10 hover:scale-110 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.3)] transition-all duration-300 cursor-default">
                 <div className="text-3xl md:text-4xl font-bold text-primary">24/7</div>
                 <div className="text-sm text-muted-foreground mt-1">Support</div>
               </div>
