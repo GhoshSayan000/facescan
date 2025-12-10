@@ -13,23 +13,38 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
+const DEPARTMENTS = [
+  "CSE", "CSE-DS", "CSE-AIML", "IT", "ME", "EE", "ECE", "AUE", "MBA", "MCA", "BBA"
+];
+
+const getYearsForDepartment = (department: string): number[] => {
+  if (["MBA"].includes(department)) return [1, 2];
+  if (["MCA", "BBA"].includes(department)) return [1, 2, 3];
+  return [1, 2, 3, 4];
+};
+
 export default function TeacherSetup() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [selectedClass, setSelectedClass] = useState("");
-  const [selectedSemester, setSelectedSemester] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const [classes, setClasses] = useState<any[]>([]);
-  const [semesters, setSemesters] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<any>(null);
   const [showRequestModal, setShowRequestModal] = useState(false);
+
+  const availableYears = selectedDepartment ? getYearsForDepartment(selectedDepartment) : [];
 
   useEffect(() => {
     checkAuth();
     fetchData();
   }, []);
+
+  // Reset year when department changes
+  useEffect(() => {
+    setSelectedYear("");
+  }, [selectedDepartment]);
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -60,8 +75,6 @@ export default function TeacherSetup() {
   };
 
   const fetchData = async () => {
-    const { data: classesData } = await supabase.from("classes").select("*");
-    const { data: semestersData } = await supabase.from("semesters").select("*");
     const { data: { session } } = await supabase.auth.getSession();
     
     if (session) {
@@ -80,14 +93,11 @@ export default function TeacherSetup() {
       
       setRequests(requestsData || []);
     }
-
-    setClasses(classesData || []);
-    setSemesters(semestersData || []);
   };
 
   const handleConfirm = () => {
-    if (selectedClass && selectedSemester && selectedDate) {
-      navigate(`/teacher/dashboard?class=${selectedClass}&semester=${selectedSemester}&date=${format(selectedDate, "yyyy-MM-dd")}`);
+    if (selectedDepartment && selectedYear && selectedDate) {
+      navigate(`/teacher/dashboard?department=${selectedDepartment}&year=${selectedYear}&date=${format(selectedDate, "yyyy-MM-dd")}`);
     }
   };
 
@@ -145,15 +155,15 @@ export default function TeacherSetup() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Select Class</label>
-                <Select value={selectedClass} onValueChange={setSelectedClass}>
+                <label className="text-sm font-medium mb-2 block">Select Department</label>
+                <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Choose a class" />
+                    <SelectValue placeholder="Choose a department" />
                   </SelectTrigger>
                   <SelectContent>
-                    {classes.map((cls) => (
-                      <SelectItem key={cls.id} value={cls.id}>
-                        {cls.name}
+                    {DEPARTMENTS.map((dept) => (
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -161,15 +171,19 @@ export default function TeacherSetup() {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Select Semester</label>
-                <Select value={selectedSemester} onValueChange={setSelectedSemester}>
+                <label className="text-sm font-medium mb-2 block">Select Year</label>
+                <Select 
+                  value={selectedYear} 
+                  onValueChange={setSelectedYear}
+                  disabled={!selectedDepartment}
+                >
                   <SelectTrigger>
-                    <SelectValue placeholder="Choose a semester" />
+                    <SelectValue placeholder={selectedDepartment ? "Choose a year" : "Select department first"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {semesters.map((sem) => (
-                      <SelectItem key={sem.id} value={sem.id}>
-                        {sem.name}
+                    {availableYears.map((year) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        Year {year}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -207,7 +221,7 @@ export default function TeacherSetup() {
               <Button
                 className="w-full"
                 size="lg"
-                disabled={!selectedClass || !selectedSemester || !selectedDate}
+                disabled={!selectedDepartment || !selectedYear || !selectedDate}
                 onClick={handleConfirm}
               >
                 Confirm & Continue
